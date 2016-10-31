@@ -31,6 +31,26 @@ var albumMarconi = {
     ]
 };
 
+var albumKurosaki = {
+    title: 'Reincarnation',
+    artist: 'Maon Kurosaki',
+    label: 'NBCUniversal Entertainment Japan',
+    year: '2014',
+    albumArtURL: 'assets/images/album_covers/reincarnation.jpg',
+    songs: [
+        { title: 'X-Encounter', duration: '6:15' },
+        { title: '-Autonomy-', duration: '4:09' },
+        { title: 'Algo~Who Knows It?', duration: '4:27' },
+        { title: '...Because, In Shadow', duration: '5:51' },
+        { title: 'Fixxx and Lie', duration: '3:59' },
+        { title: 'K O N', duration: '3:10' },
+        { title: 'Dysnomia', duration: '5:07' },
+        { title: 'Trying! Trying!', duration: '4:40' },
+        { title: 'Himawari no Natsu', duration: '5:01' },
+        { title: 'Reincarnation', duration: '6:06' },
+    ]
+};
+
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
         '<tr class="album-view-song-item">'
@@ -43,14 +63,14 @@ var createSongRow = function(songNumber, songName, songLength) {
     return template;
 };
 
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
 var setCurrentAlbum = function(album) {
-    //#1   
-    var albumTitle = document.getElementsByClassName('album-view-title')[0];
-    var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-    var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-    var albumImage = document.getElementsByClassName('album-cover-art')[0];
-    var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
-    
+
     //#2
     albumTitle.firstChild.nodeValue = album.title;
     albumArtist.firstChild.nodeValue = album.artist;
@@ -66,8 +86,20 @@ var setCurrentAlbum = function(album) {
     }
 };
 
+var listOfAlbums = [albumPicasso, albumMarconi, albumKurosaki];
+var albumNumber = 1;
+
 window.onload = function() {
     setCurrentAlbum(albumPicasso);
+    
+    albumImage.addEventListener("click",function(event) {
+        setCurrentAlbum(listOfAlbums[albumNumber]);        
+        albumNumber++;
+        
+        if (albumNumber == listOfAlbums.length) {
+            albumNumber = 0;
+        }
+    });
 };
     
 
