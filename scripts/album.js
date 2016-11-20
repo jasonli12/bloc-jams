@@ -77,25 +77,25 @@ var currentlyPlayingSong = null;
 window.onload = function() {
     setCurrentAlbum(albumPicasso);
     
-    var findParentByClassName = function(element,targetClassName) {
-        if(element) {
-            var currentParent = element.parentElement;
-            while (currentParent.className != targetClassName && currentParent.className !== null) {
-                if (currentParent.parentElement === null) {
-                    if (currentParent.className != targetClassName) {
-                        alert("No parent found with that class name");
-                    }
-                    else {
-                        alert("No parent found");
-                    }
-                    break;
-                } else {
-                    currentParent = currentParent.parentElement;            
-                }
+var findParentByClassName = function(element,targetClassName) {
+    var currentParent = element.parentElement;
+    if (currentParent) {
+        while (currentParent.className != targetClassName && currentParent.className !== null) {
+            currentParent = currentParent.parentElement;
+            if (currentParent === null) {
+                alert("No parent found with that class name");
+                return;
             }
-            return currentParent;
         }
-    };
+    
+        alert("parent found!");
+        return currentParent;
+    } else {
+        alert("No parent found");
+    }
+};
+
+
     
     var getSongItem = function(element) {
         switch (element.className) {
