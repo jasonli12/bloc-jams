@@ -109,20 +109,36 @@ var updatePlayerBarSong = function() {
     $('.main-controls .play-pause').html(playerBarPauseButton);
 };
 
-var nextSong = function() {
-    var getLastSongNumber = function(index) { 
-        if(index == 0) {
-            return currentAlbum.songs.length; // if index is 0, the current song is the  1st song, so the previous song number is the length of the list of songs in the album.
-        } else {
-            return index; // if index is not 0, let's say 1, while in the array this represents the 2nd song (song number #2), the previous song number is #1.
+var changeSongFromPlayerBar = function() {
+    //determine whether the button is previous or next by $(this) and checking the class to be previous or next
+    var currentSongIndex = trackIndex(currentAlbum,currentSongFromAlbum);
+    if ($(this).hasClass("previous")) {
+        var getLastSongNumber = function(index) {
+            if(index == currentAlbum.songs.length - 1) {
+                return 1; 
+            } else {
+                return index + 2; 
+            }
+        };
+        
+        currentSongIndex--; 
+    
+        if (currentSongIndex < 0) {
+            currentSongIndex = currentAlbum.songs.length - 1;  
         }
-    };
-    var currentSongIndex = trackIndex(currentAlbum,currentSongFromAlbum); // currentSongFromAlbum is the object in the songs array. This returns the index of the current song in the songs array
+    } else if ($(this).hasClass("next")) {
+        var getLastSongNumber = function(index) { 
+            if(index == 0) {
+                return currentAlbum.songs.length; 
+            } else {
+                return index; 
+            }
+        };
+        currentSongIndex++; 
     
-    currentSongIndex++; // increment the currentSongIndex by 1 to get to the next song
-    
-    if (currentSongIndex >= currentAlbum.songs.length) {
-        currentSongIndex = 0;  // the index needs to wrap around to the beginning when it reaches the end of the list
+        if (currentSongIndex >= currentAlbum.songs.length) {
+            currentSongIndex = 0;
+        }
     }
     
     currentlyPlayingSongNumber = currentSongIndex + 1; 
@@ -134,44 +150,11 @@ var nextSong = function() {
     $('.main-controls .play-pause').html(playerBarPauseButton);
     
     var lastSongNumber = getLastSongNumber(currentSongIndex);
-    var $nextSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
-    var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
+    var $nowPlayingSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
+    var $lastPlayingSongNumberCell = getSongNumberCell(lastSongNumber);
     
-    $nextSongNumberCell.html(pauseButtonTemplate);
-    $lastSongNumberCell.html(lastSongNumber);
-    
-};
-
-var previousSong = function() {
-    var getLastSongNumber = function(index) { //note the relationship between the index and the song number after you decremented, in all cases, except the last index, the song = index + 2
-        if(index == currentAlbum.songs.length - 1) {
-            return 1; 
-        } else {
-            return index + 2; 
-        }
-    };
-    var currentSongIndex = trackIndex(currentAlbum,currentSongFromAlbum); 
-    
-    currentSongIndex--; 
-    
-    if (currentSongIndex < 0) {
-        currentSongIndex = currentAlbum.songs.length - 1;  
-    }
-    
-    currentlyPlayingSongNumber = currentSongIndex + 1; 
-    currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
-    
-    $('.currently-playing .song-name').text(currentSongFromAlbum.title);
-    $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
-    $('.currently-playing .artist-name').text(currentAlbum.artist);    
-    $('.main-controls .play-pause').html(playerBarPauseButton);
-    
-    var lastSongNumber = getLastSongNumber(currentSongIndex);
-    var $previousSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
-    var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
-    
-    $previousSongNumberCell.html(pauseButtonTemplate);
-    $lastSongNumberCell.html(lastSongNumber);
+    $nowPlayingSongNumberCell.html(pauseButtonTemplate);
+    $lastPlayingSongNumberCell.html(lastSongNumber);
     
 };
 
@@ -180,8 +163,8 @@ var $nextButton = $('.main-controls .next');
 
 $(document).ready(function() {
     setCurrentAlbum(albumPicasso);
-    $previousButton.click(previousSong);
-    $nextButton.click(nextSong);
+    $previousButton.click(changeSongFromPlayerBar);
+    $nextButton.click(changeSongFromPlayerBar);
 });
 
 
