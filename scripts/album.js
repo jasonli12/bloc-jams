@@ -93,6 +93,7 @@ var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></
 var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
 var playerBarPlayButton = '<span class="ion-play"></span>';
 var playerBarPauseButton = '<span class="ion-pause"></span>';
+var $togglePlayFromPlayerBar = $('.main-controls .play-pause');
 
 var currentAlbum = null;
 var currentlyPlayingSongNumber = null;
@@ -192,10 +193,25 @@ var previousSong = function() {
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 
+var togglePlayFromPlayerBar = function() {
+    var currentlyPlayingSongElement = getSongNumberCell(currentlyPlayingSongNumber);
+    
+    if (currentSoundFile.isPaused()) {
+        currentlyPlayingSongElement.html(pauseButtonTemplate);
+        $togglePlayFromPlayerBar.html(playerBarPauseButton);
+        currentSoundFile.play();
+    } else {
+        currentlyPlayingSongElement.html(playButtonTemplate);
+        $togglePlayFromPlayerBar.html(playerBarPlayButton);
+        currentSoundFile.pause();
+    }
+};
+
 $(document).ready(function() {
     setCurrentAlbum(albumPicasso);
     $previousButton.click(previousSong);
     $nextButton.click(nextSong);
+    $togglePlayFromPlayerBar.click(togglePlayFromPlayerBar);
 });
 
 
